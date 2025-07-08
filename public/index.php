@@ -249,6 +249,7 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
                                 <tr>
                                     <th>No</th>
                                     <th>Nama Dataset</th>
+                                    <th>Jumlah Dataset</th>
                                     <th>Akurasi</th>
                                     <th>Tanggal Dibuat</th>
                                     <th>Aksi</th>
@@ -256,10 +257,13 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
                             </thead>
                             <tbody>
                                 <?php $no = 1; ?>
-                                <?php foreach ($datasets as $dataset) : ?>
+                                <?php foreach (
+                                    $datasets as $dataset
+                                ) : ?>
                                     <tr>
                                         <td><?php echo $no++; ?></td>
                                         <td><?php echo htmlspecialchars($dataset['name']); ?></td>
+                                        <td><?php echo count($db->getRawData($dataset['id'])); ?></td>
                                         <td><?php echo number_format($dataset['accuracy'], 2); ?>%</td>
                                         <td><?php echo $dataset['created_at']; ?></td>
                                         <td>

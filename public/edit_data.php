@@ -230,9 +230,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
                         </tbody>
                     </table>
 
-                                        <div class="form-group">
+                                        <div class="form-group form-edit">
                         <button type="submit" name="save_changes" id="save-changes-btn" class="btn"><i class="fas fa-calculator"></i> Simpan Perubahan & Hitung Ulang</button>
-                        <a href="index.php?tab=results&dataset=<?php echo $datasetId; ?>" class="btn btn-secondary"><i class="fas fa-times"></i> Batal</a>
+                        <a href="index.php?tab=results&dataset=<?php echo $datasetId; ?>" class="btn btn-secondary btn-batal"><i class="fas fa-times"></i>  Batal</a>
                     </div>
                 </form>
             </section>
