@@ -87,7 +87,7 @@ Dimana:
 ## Cara Penggunaan
 
 1. Buka halaman utama aplikasi
-2. Pada tab "Upload Data", masukkan nama dataset dan pilih file CSV dengan format yang sesuai
+2. Pada tab "Upload Data", masukkan nama dataset dan pilih file excel dengan format yang sesuai
 3. Klik tombol "Proses Data"
 4. Lihat hasil perhitungan confusion matrix pada tab "Hasil"
 5. Lihat riwayat perhitungan pada tab "Riwayat"
