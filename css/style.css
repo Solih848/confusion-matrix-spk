@@ -236,6 +236,168 @@ tbody tr:hover {
     text-align: center;
 }
 
+/* Dataset Selection for Combined Matrix */
+.dataset-selection {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.dataset-selection h3 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.dataset-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #fff;
+    margin-bottom: 15px;
+}
+
+.dataset-item {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.dataset-item:last-child {
+    border-bottom: none;
+}
+
+.dataset-item label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dataset-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.select-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.select-actions button {
+    padding: 5px 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.select-actions button:hover {
+    background-color: #e9e9e9;
+}
+
+.combined-info {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #e9f7fe;
+    border-left: 4px solid #3498db;
+    border-radius: 4px;
+}
+
+.combined-info h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.combined-info ul {
+    margin-left: 20px;
+}
+
+.combined-info li {
+    margin-bottom: 5px;
+}
+
+/* Penjelasan Perhitungan */
+.explanation {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.explanation h3 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.explanation ul {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.explanation li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.calculation-example {
+    background-color: #e9f7fe;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border-left: 4px solid #3498db;
+}
+
+.calculation-example h3 {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.calculation-example p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.accuracy-container {
+    background-color: #eafaf1;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border-left: 4px solid #2ecc71;
+}
+
+.accuracy-container h3 {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.accuracy-container p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+/* Tombol Reset */
+#reset-btn,
+#reset-result-btn {
+    margin-left: auto;
+}
+
+#reset-btn:hover,
+#reset-result-btn:hover {
+    background-color: #c0392b;
+}
+
+@media (max-width: 768px) {
+    .select-actions {
+        flex-direction: column;
+    }
+
+    #reset-btn,
+    #reset-result-btn {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}
 /* CSV Format Info */
 .csv-format-info {
     background-color: #f8f9fa;

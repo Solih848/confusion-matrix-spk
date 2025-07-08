@@ -208,4 +208,56 @@ class ConfusionMatrix
 
         return $html;
     }
+
+    /**
+     * Mendapatkan metrik dalam format HTML hanya untuk kelas Layak
+     * 
+     * @return string HTML tabel metrik
+     */
+    public function getHtmlMetricsLayak()
+    {
+        $html = '<div class="metrics-container">';
+        $html .= '<h3>Metrik per Kelas</h3>';
+        $html .= '<table class="metrics-table">';
+
+        // Header
+        $html .= '<tr><th>Kelas</th><th>TP</th><th>FP</th><th>TN</th><th>FN</th><th>Precision</th><th>Recall</th><th>F1-Score</th></tr>';
+
+        // Body - hanya untuk kelas Layak
+        $layakFound = false;
+        foreach ($this->classes as $class) {
+            if (strtolower($class) === 'layak') {
+                $layakFound = true;
+                $metrics = $this->getMetrics($class);
+
+                $html .= '<tr>';
+                $html .= '<th>' . htmlspecialchars($class) . '</th>';
+                $html .= '<td>' . $metrics['tp'] . '</td>';
+                $html .= '<td>' . $metrics['fp'] . '</td>';
+                $html .= '<td>' . $metrics['tn'] . '</td>';
+                $html .= '<td>' . $metrics['fn'] . '</td>';
+                $html .= '<td>' . number_format($metrics['precision'] * 100, 2) . '%</td>';
+                $html .= '<td>' . number_format($metrics['recall'] * 100, 2) . '%</td>';
+                $html .= '<td>' . number_format($metrics['f1_score'] * 100, 2) . '%</td>';
+                $html .= '</tr>';
+                break;
+            }
+        }
+
+        // Jika kelas Layak tidak ditemukan, tampilkan pesan
+        if (!$layakFound) {
+            $html .= '<tr><td colspan="8" class="text-center">Kelas "Layak" tidak ditemukan dalam dataset</td></tr>';
+        }
+
+        // Akurasi keseluruhan
+        $html .= '<tr class="overall">';
+        $html .= '<th colspan="7">Akurasi Keseluruhan</th>';
+        $html .= '<td>' . number_format($this->getAccuracy() * 100, 2) . '%</td>';
+        $html .= '</tr>';
+
+        $html .= '</table>';
+        $html .= '</div>';
+
+        return $html;
+    }
 }

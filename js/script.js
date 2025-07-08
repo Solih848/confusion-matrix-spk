@@ -22,6 +22,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Fungsi untuk halaman Matrix Gabungan
+    const selectAllBtn = document.getElementById('select-all');
+    if (selectAllBtn) {
+        selectAllBtn.addEventListener('click', function () {
+            const checkboxes = document.querySelectorAll('input[name="datasets[]"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        });
+    }
+
+    const deselectAllBtn = document.getElementById('deselect-all');
+    if (deselectAllBtn) {
+        deselectAllBtn.addEventListener('click', function () {
+            const checkboxes = document.querySelectorAll('input[name="datasets[]"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        });
+    }
+
     // Menampilkan alert jika ada parameter status di URL
     const urlParams = new URLSearchParams(window.location.search);
     const status = urlParams.get('status');

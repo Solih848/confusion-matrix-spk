@@ -71,6 +71,9 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
                 <li class="<?php echo $activeTab === 'history' ? 'active' : ''; ?>">
                     <a href="?tab=history">Riwayat</a>
                 </li>
+                <li>
+                    <a href="combined_matrix.php">Matrix Gabungan</a>
+                </li>
                 <?php if ($selectedDataset > 0) : ?>
                     <li class="<?php echo $activeTab === 'results' ? 'active' : ''; ?>">
                         <a href="?tab=results&dataset=<?php echo $selectedDataset; ?>">Hasil</a>
@@ -243,7 +246,7 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
                         <table class="datasets-table table-data">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>No</th>
                                     <th>Nama Dataset</th>
                                     <th>Akurasi</th>
                                     <th>Tanggal Dibuat</th>
@@ -251,9 +254,10 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $no = 1; ?>
                                 <?php foreach ($datasets as $dataset) : ?>
                                     <tr>
-                                        <td><?php echo $dataset['id']; ?></td>
+                                        <td><?php echo $no++; ?></td>
                                         <td><?php echo htmlspecialchars($dataset['name']); ?></td>
                                         <td><?php echo number_format($dataset['accuracy'], 2); ?>%</td>
                                         <td><?php echo $dataset['created_at']; ?></td>
