@@ -1,0 +1,6 @@
+id,nama_alternatif,nilai_vektor_v,kelayakan_sistem
+1,Alternatif A,0.85,Layak
+2,Alternatif B,0.75,Layak
+3,Alternatif C,0.45,Tidak Layak
+4,Alternatif D,0.92,Layak
+5,Alternatif E,0.38,Tidak Layak 

@@ -1,0 +1,480 @@
+/* 
+ * Style untuk Sistem Penghitungan Confusion Matrix
+ */
+
+/* Reset dan Dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f7f9;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+header p {
+    color: #7f8c8d;
+}
+
+/* Navigation */
+nav {
+    margin-bottom: 30px;
+}
+
+.tabs {
+    display: flex;
+    list-style: none;
+    border-bottom: 2px solid #eee;
+}
+
+.tabs li {
+    margin-right: 5px;
+}
+
+.tabs li a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #7f8c8d;
+    border-radius: 5px 5px 0 0;
+    transition: all 0.3s ease;
+}
+
+.tabs li.active a {
+    background-color: #3498db;
+    color: white;
+}
+
+.tabs li a:hover {
+    background-color: #e9f5fe;
+    color: #3498db;
+}
+
+.tabs li.active a:hover {
+    background-color: #2980b9;
+    color: white;
+}
+
+/* Main content */
+main {
+    min-height: 400px;
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+section h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+input[type="text"],
+input[type="file"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+input[type="file"] {
+    padding: 8px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-small {
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th,
+td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+thead th {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.datasets-table th:nth-child(3),
+.datasets-table td:nth-child(3) {
+    text-align: center;
+}
+
+.datasets-table th:last-child,
+.datasets-table td:last-child {
+    text-align: center;
+}
+
+/* Raw Data Table */
+.raw-data-table .correct {
+    background-color: rgba(46, 204, 113, 0.1);
+}
+
+.raw-data-table .incorrect {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Confusion Matrix */
+.confusion-matrix-visualization {
+    margin-bottom: 30px;
+}
+
+.confusion-matrix {
+    width: auto;
+    margin: 20px 0;
+}
+
+.confusion-matrix th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.confusion-matrix td.correct {
+    background-color: rgba(46, 204, 113, 0.2);
+    font-weight: bold;
+}
+
+.confusion-matrix td.incorrect {
+    background-color: rgba(231, 76, 60, 0.2);
+}
+
+/* Metrics Table */
+.metrics-table th,
+.metrics-table td {
+    text-align: center;
+}
+
+/* CSV Format Info */
+.csv-format-info {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 4px;
+    margin-top: 30px;
+}
+
+.csv-format-info h3 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.csv-format-info pre {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 4px;
+    overflow: auto;
+    margin: 15px 0;
+}
+
+.csv-format-info ul {
+    padding-left: 20px;
+    margin: 15px 0;
+}
+
+/* Dataset Info */
+.dataset-info {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.dataset-info h3 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.dataset-info p {
+    margin-bottom: 10px;
+}
+
+/* Alerts */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.data-warning {
+    margin-bottom: 20px;
+}
+
+.data-warning .alert {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.data-warning strong {
+    font-weight: 700;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    padding: 20px;
+    border-radius: 4px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.error-message h2 {
+    color: #721c24;
+    margin-bottom: 10px;
+}
+
+/* Action Buttons */
+.action-buttons {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.action-buttons .btn {
+    margin: 0 5px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #95a5a6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    .tabs {
+        flex-direction: column;
+    }
+
+    .tabs li {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+
+    .tabs li a {
+        border-radius: 4px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    th,
+    td {
+        min-width: 100px;
+    }
+}
+
+/* Bulk Actions */
+.bulk-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.bulk-select {
+    display: flex;
+    flex-direction: column;
+}
+
+.bulk-select label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.bulk-help {
+    margin-top: 5px;
+    margin-left: 28px;
+    color: #7f8c8d;
+}
+
+.bulk-select input[type="checkbox"] {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+}
+
+.bulk-apply {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.bulk-apply label {
+    margin-bottom: 0;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.bulk-apply select {
+    width: auto;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    border: 1px solid #3498db;
+    border-radius: 3px;
+}
+
+.raw-data-table th:first-child,
+.raw-data-table td:first-child {
+    width: 40px;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .bulk-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .bulk-apply {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}

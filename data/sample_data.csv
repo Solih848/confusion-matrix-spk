@@ -1,0 +1,21 @@
+id,nama_alternatif,nilai_vektor_v,kelayakan_sistem
+1,Alternatif A,0.85,Layak
+2,Alternatif B,0.75,Layak
+3,Alternatif C,0.45,Tidak Layak
+4,Alternatif D,0.92,Layak
+5,Alternatif E,0.38,Tidak Layak
+6,Alternatif F,0.82,Layak
+7,Alternatif G,0.35,Tidak Layak,Layak
+8,Alternatif H,0.41,Tidak Layak,Tidak Layak
+9,Alternatif I,0.88,Layak,Layak
+10,Alternatif J,0.33,Tidak Layak,Tidak Layak
+11,Alternatif K,0.87,Layak,Layak
+12,Alternatif L,0.25,Tidak Layak,Tidak Layak
+13,Alternatif M,0.77,Layak,Tidak Layak
+14,Alternatif N,0.65,Layak,Tidak Layak
+15,Alternatif O,0.79,Layak,Layak
+16,Alternatif P,0.30,Tidak Layak,Tidak Layak
+17,Alternatif Q,0.81,Layak,Layak
+18,Alternatif R,0.42,Tidak Layak,Tidak Layak
+19,Alternatif S,0.91,Layak,Layak
+20,Alternatif T,0.58,Layak,Tidak Layak 
