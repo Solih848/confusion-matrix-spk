@@ -387,4 +387,50 @@ class Database
 
         return $stmt->rowCount() > 0;
     }
+
+    /**
+     * Menghapus data confusion matrix berdasarkan dataset ID
+     * 
+     * @param int $datasetId ID dataset
+     * @return bool Status keberhasilan
+     */
+    public function deleteConfusionMatrix($datasetId)
+    {
+        $stmt = $this->db->prepare('DELETE FROM confusion_matrix WHERE dataset_id = :dataset_id');
+        $stmt->bindValue(':dataset_id', $datasetId);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
+    }
+
+    /**
+     * Memperbarui data mentah
+     * 
+     * @param int $id ID data mentah
+     * @param string $namaAlternatif Nama alternatif
+     * @param float $nilaiVektorV Nilai vektor V
+     * @param string $kelayakanSistem Kelayakan sistem
+     * @param string $kelayakanAktual Kelayakan aktual
+     * @return bool Status keberhasilan
+     */
+    public function updateRawData($id, $namaAlternatif, $nilaiVektorV, $kelayakanSistem, $kelayakanAktual)
+    {
+        $stmt = $this->db->prepare('
+            UPDATE raw_data 
+            SET nama_alternatif = :nama_alternatif,
+                nilai_vektor_v = :nilai_vektor_v,
+                kelayakan_sistem = :kelayakan_sistem,
+                kelayakan_aktual = :kelayakan_aktual
+            WHERE id = :id
+        ');
+
+        $stmt->bindValue(':nama_alternatif', $namaAlternatif);
+        $stmt->bindValue(':nilai_vektor_v', $nilaiVektorV);
+        $stmt->bindValue(':kelayakan_sistem', $kelayakanSistem);
+        $stmt->bindValue(':kelayakan_aktual', $kelayakanAktual);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
+    }
 }

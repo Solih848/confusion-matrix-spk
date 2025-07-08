@@ -259,6 +259,7 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
                                         <td><?php echo $dataset['created_at']; ?></td>
                                         <td>
                                             <a href="?tab=results&dataset=<?php echo $dataset['id']; ?>" class="btn btn-small">Lihat</a>
+                                            <a href="edit_data.php?dataset=<?php echo $dataset['id']; ?>" class="btn btn-small btn-primary">Edit</a>
                                             <a href="export_dataset.php?id=<?php echo $dataset['id']; ?>&format=json" class="btn btn-small">Export</a>
                                             <a href="delete_dataset.php?id=<?php echo $dataset['id']; ?>" class="btn btn-small btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus dataset ini?')">Hapus</a>
                                         </td>

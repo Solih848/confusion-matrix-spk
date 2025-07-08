@@ -478,3 +478,67 @@ input[type="checkbox"] {
         flex-wrap: wrap;
     }
 }
+/* Tambahkan gaya untuk halaman edit data */
+.edit-section {
+    margin-bottom: 30px;
+}
+
+.edit-section .form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.edit-section .alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.edit-section .alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.edit-section .alert-error {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+}
+
+/* Gaya untuk tabel pada halaman edit */
+.edit-section table input[type="text"],
+.edit-section table input[type="number"],
+.edit-section table select {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 768px) {
+    .bulk-actions {
+        flex-direction: column;
+    }
+
+    .bulk-apply {
+        margin-top: 10px;
+    }
+
+    .edit-section table {
+        display: block;
+        overflow-x: auto;
+    }
+}
