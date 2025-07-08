@@ -53,6 +53,7 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Perhitungan Confusion Matrix SPK</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 </head>
 
@@ -66,13 +67,13 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
         <nav>
             <ul class="tabs">
                 <li class="<?php echo $activeTab === 'upload' ? 'active' : ''; ?>">
-                    <a href="?tab=upload">Upload Data</a>
+                    <a href="?tab=upload"><i class="fas fa-upload"></i> Upload Data</a>
                 </li>
                 <li class="<?php echo $activeTab === 'history' ? 'active' : ''; ?>">
-                    <a href="?tab=history">Riwayat</a>
+                    <a href="?tab=history"><i class="fas fa-history"></i> Riwayat</a>
                 </li>
                 <li>
-                    <a href="combined_matrix.php">Matrix Gabungan</a>
+                    <a href="combined_matrix.php"><i class="fas fa-layer-group"></i> Matrix Gabungan</a>
                 </li>
                 <?php if ($selectedDataset > 0) : ?>
                     <li class="<?php echo $activeTab === 'results' ? 'active' : ''; ?>">
@@ -85,7 +86,7 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
         <main>
             <?php if ($activeTab === 'upload') : ?>
                 <section class="upload-section">
-                    <h2>Upload Data SPK</h2>
+                    <h2><i class="fas fa-file-upload"></i> Upload Data SPK</h2>
                     <p>Upload file Excel (.xlsx) dengan format: id, nama_alternatif, nilai_vektor_v, kelayakan_sistem <br><b>(tanpa kolom kelayakan_aktual)</b></p>
 
                     <?php if (empty($uploadedData)) : ?>
@@ -99,11 +100,11 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
                                 <input type="file" id="excel_file" name="excel_file" accept=".xlsx" required>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn">Upload & Input Kelayakan Aktual</button>
+                                <button type="submit" class="btn"><i class="fas fa-cloud-upload-alt"></i> Upload & Input Kelayakan Aktual</button>
                             </div>
                         </form>
                         <div class="csv-format-info">
-                            <h3>Format Excel</h3>
+                            <h3><i class="fas fa-file-excel"></i> Format Excel</h3>
                             <p>File Excel harus memiliki format sebagai berikut:</p>
                             <table class="sample-table table-data">
                                 <thead>
@@ -148,7 +149,7 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
                                 </tbody>
                             </table>
                             <p>
-                                <a href="download_template_excel.php" class="btn btn-small">Download Template Excel</a>
+                                <a href="download_template_excel.php" class="btn btn-small"><i class="fas fa-download"></i> Download Template Excel</a>
                             </p>
                             <div class="excel-info">
                                 <b>Tips:</b> Anda dapat mengisi data pada file Excel, lalu upload ke sistem.
@@ -231,14 +232,14 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
                                 </tbody>
                             </table>
                             <div class="form-group">
-                                <button type="submit" class="btn">Proses Data & Hitung Confusion Matrix</button>
+                                <button type="submit" class="btn"><i class="fas fa-cogs"></i> Proses Data & Hitung Confusion Matrix</button>
                             </div>
                         </form>
                     <?php endif; ?>
                 </section>
             <?php elseif ($activeTab === 'history') : ?>
                 <section class="history-section">
-                    <h2>Riwayat Perhitungan</h2>
+                    <h2><i class="fas fa-history"></i> Riwayat Perhitungan</h2>
 
                     <?php if (empty($datasets)) : ?>
                         <p>Belum ada dataset yang diproses.</p>
@@ -262,10 +263,10 @@ if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] === UPLOAD_ER
                                         <td><?php echo number_format($dataset['accuracy'], 2); ?>%</td>
                                         <td><?php echo $dataset['created_at']; ?></td>
                                         <td>
-                                            <a href="?tab=results&dataset=<?php echo $dataset['id']; ?>" class="btn btn-small">Lihat</a>
-                                            <a href="edit_data.php?dataset=<?php echo $dataset['id']; ?>" class="btn btn-small btn-primary">Edit</a>
-                                            <a href="export_dataset.php?id=<?php echo $dataset['id']; ?>&format=json" class="btn btn-small">Export</a>
-                                            <a href="delete_dataset.php?id=<?php echo $dataset['id']; ?>" class="btn btn-small btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus dataset ini?')">Hapus</a>
+                                            <a href="?tab=results&dataset=<?php echo $dataset['id']; ?>" class="btn btn-small"><i class="fas fa-eye"></i> Lihat</a>
+                                            <a href="edit_data.php?dataset=<?php echo $dataset['id']; ?>" class="btn btn-small btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                                            <a href="export_dataset.php?id=<?php echo $dataset['id']; ?>&format=json" class="btn btn-small"><i class="fas fa-file-code"></i> Export</a>
+                                            <a href="delete_dataset.php?id=<?php echo $dataset['id']; ?>" class="btn btn-small btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus dataset ini?')"><i class="fas fa-trash-alt"></i> Hapus</a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

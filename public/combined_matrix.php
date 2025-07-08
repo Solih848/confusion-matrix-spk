@@ -69,6 +69,7 @@ if (isset($_POST['calculate']) && isset($_POST['datasets']) && !empty($_POST['da
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confusion Matrix Gabungan - Sistem Perhitungan Confusion Matrix SPK</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 </head>
 
@@ -120,9 +121,9 @@ if (isset($_POST['calculate']) && isset($_POST['datasets']) && !empty($_POST['da
                             </div>
 
                             <div class="select-actions">
-                                <button type="button" id="select-all" style="background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 16px; transition: background-color 0.3s ease;">Pilih Semua</button>
-                                <button type="button" id="deselect-all" style="background-color: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 16px; transition: background-color 0.3s ease;">Batalkan Semua</button>
-                                <button type="submit" name="calculate" class="btn" style="background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 16px; transition: background-color 0.3s ease;">Hitung Confusion Matrix Gabungan</button>
+                                <button type="button" id="select-all" style="background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 16px; transition: background-color 0.3s ease;"><i class="fas fa-check-double"></i> Pilih Semua</button>
+                                <button type="button" id="deselect-all" style="background-color: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 16px; transition: background-color 0.3s ease;"><i class="fas fa-times-circle"></i> Batalkan Semua</button>
+                                <button type="submit" name="calculate" class="btn" style="background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 16px; transition: background-color 0.3s ease;"><i class="fas fa-calculator"></i> Hitung Confusion Matrix Gabungan</button>
                             </div>
                         </form>
                     <?php endif; ?>
@@ -214,7 +215,7 @@ if (isset($_POST['calculate']) && isset($_POST['datasets']) && !empty($_POST['da
 
                     <!-- Tombol aksi -->
                     <div class="action-buttons">
-                        <a href="combined_matrix.php" class="btn btn-danger" id="reset-btn">Reset</a>
+                        <a href="combined_matrix.php" class="btn btn-danger" id="reset-btn"><i class="fas fa-undo"></i> Reset</a>
                     </div>
                 <?php elseif (isset($_POST['calculate'])) : ?>
                     <div class="alert alert-warning">
