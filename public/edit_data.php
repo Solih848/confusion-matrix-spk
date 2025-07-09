@@ -152,16 +152,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
 
                 <form action="" method="post" id="form-edit">
                     <div class="bulk-actions">
-                        <div class="bulk-select">
-                            <label>
+                        <div class="bulk-select" style="display: flex; align-items: center; gap: 8px;">
+                            <label style="margin-bottom:0; display:flex; align-items:center; gap:8px;">
                                 <input type="checkbox" id="select-all-checkbox"> Pilih Semua Data
+                                <span id="selected-count" style="font-size:13px; color:#007bff; font-weight:500; background:#eaf4ff; border-radius:12px; padding:2px 10px; display:inline-block; min-width:70px; text-align:center; margin-left:0;">(0 terpilih)</span>
                             </label>
                             <div class="bulk-help">
                                 <small>Centang ini untuk memilih semua data di semua halaman</small>
                             </div>
                         </div>
                         <div class="bulk-apply">
-                            <label for="bulk-kelayakan-sistem">Set Kelayakan Sistem Terpilih:</label>
+                            <label for="bulk-kelayakan-sistem">Kelayakan Sistem:</label>
                             <select id="bulk-kelayakan-sistem">
                                 <option value="">-- Pilih --</option>
                                 <option value="Layak">Layak</option>
@@ -169,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
                             </select>
                             <button type="button" id="apply-bulk-sistem" class="btn btn-small">Terapkan</button>
 
-                            <label for="bulk-kelayakan-aktual">Set Kelayakan Aktual Terpilih:</label>
+                            <label for="bulk-kelayakan-aktual">Kelayakan Aktual:</label>
                             <select id="bulk-kelayakan-aktual">
                                 <option value="">-- Pilih --</option>
                                 <option value="Layak">Layak</option>
@@ -190,7 +191,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
                     <table id="data-table" class="raw-data-table table-data">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" id="header-checkbox"></th>
+                                <th>
+                                    <input type="checkbox" id="header-checkbox">
+                                </th>
                                 <th>No</th>
                                 <th>Nama Alternatif</th>
                                 <th>Nilai Vektor V</th>
@@ -230,9 +233,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
                         </tbody>
                     </table>
 
-                                        <div class="form-group form-edit">
+                    <div class="form-group form-edit">
                         <button type="submit" name="save_changes" id="save-changes-btn" class="btn"><i class="fas fa-calculator"></i> Simpan Perubahan & Hitung Ulang</button>
-                        <a href="index.php?tab=results&dataset=<?php echo $datasetId; ?>" class="btn btn-secondary btn-batal"><i class="fas fa-times"></i>  Batal</a>
+                        <a href="index.php?tab=results&dataset=<?php echo $datasetId; ?>" class="btn btn-secondary btn-batal"><i class="fas fa-times"></i> Batal</a>
                     </div>
                 </form>
             </section>
@@ -354,6 +357,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
             setTimeout(function() {
                 showAlert('Untuk memudahkan pengisian, gunakan fitur "Pilih Semua Data" dan "Tampilkan Semua Data"', 'info');
             }, 1000);
+
+            // Fungsi untuk update jumlah terpilih
+            function updateSelectedCount() {
+                var count = $('.row-checkbox:checked').length;
+                $('#selected-count').text('(' + count + ' terpilih)');
+            }
+
+            // Update saat halaman dimuat
+            updateSelectedCount();
+
+            // Update saat checkbox baris diubah
+            $(document).on('change', '.row-checkbox', function() {
+                updateSelectedCount();
+            });
+
+            // Update saat header checkbox diubah
+            $('#header-checkbox').change(function() {
+                setTimeout(updateSelectedCount, 10);
+            });
+
+            // Update saat select-all-checkbox diubah
+            $('#select-all-checkbox').change(function() {
+                setTimeout(updateSelectedCount, 10);
+            });
+
+            // Update juga setelah DataTable draw (misal paginasi)
+            var table = $('#data-table').DataTable();
+            table.on('draw', function() {
+                updateSelectedCount();
+            });
         });
     </script>
 </body>
