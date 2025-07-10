@@ -194,6 +194,7 @@ echo '</div>';
 echo '
     <div class="action-buttons">
         <a href="export_dataset.php?id=' . $datasetId . '&format=json" class="btn">Export JSON</a>
+        <a href="export_dataset.php?id=' . $datasetId . '&format=excel" class="btn btn-success">Export Excel</a>
         <a href="edit_data.php?dataset=' . $datasetId . '" class="btn btn-primary">Edit Data</a>
         <a href="index.php" class="btn btn-secondary">Kembali ke Beranda</a>
     </div>

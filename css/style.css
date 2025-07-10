@@ -722,3 +722,10 @@ input[type="checkbox"] {
     gap: 10px;
     padding: 7px 10px;
 }
+.btn-success {
+    background-color: #27ae60;
+}
+
+.btn-success:hover {
+    background-color: #219653;
+}

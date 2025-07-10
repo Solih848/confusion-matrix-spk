@@ -6,6 +6,9 @@
 
 // Muat utilitas database
 require_once __DIR__ . '/../src/database_utilities.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 // Periksa apakah ID dataset dan format diberikan
 if (!isset($_GET['id']) || empty($_GET['id'])) {
@@ -61,11 +64,37 @@ if ($format === 'json') {
     // Output data
     echo $csvData;
     exit;
+} elseif ($format === 'excel') {
+    // Ekspor ke Excel
+    try {
+        // Dapatkan spreadsheet
+        $spreadsheet = $dbUtils->exportDatasetToExcel($datasetId);
+
+        // Buat writer
+        $writer = new Xlsx($spreadsheet);
+
+        // Set header untuk download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="dataset_' . $datasetId . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        // Simpan ke output
+        $writer->save('php://output');
+        exit;
+    } catch (Exception $e) {
+        die('
+            <div class="error-message">
+                <h2>Error</h2>
+                <p>Gagal mengekspor dataset ke Excel: ' . $e->getMessage() . '</p>
+                <a href="index.php?tab=history" class="btn">Kembali ke Riwayat</a>
+            </div>
+        ');
+    }
 } else {
     die('
         <div class="error-message">
             <h2>Error</h2>
-            <p>Format ekspor tidak didukung. Format yang didukung: json, sql, csv.</p>
+            <p>Format ekspor tidak didukung. Format yang didukung: json, sql, csv, excel.</p>
             <a href="index.php?tab=history" class="btn">Kembali ke Riwayat</a>
         </div>
     ');

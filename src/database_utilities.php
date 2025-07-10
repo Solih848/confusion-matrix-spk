@@ -7,6 +7,13 @@
 
 // Muat konfigurasi database
 require_once 'config.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 /**
  * Kelas DatabaseUtilities untuk operasi database lanjutan
@@ -342,5 +349,219 @@ class DatabaseUtilities
         fclose($output);
 
         return $csv;
+    }
+
+    /**
+     * Export data dataset ke format Excel
+     * 
+     * @param int $datasetId ID dataset
+     * @return Spreadsheet objek Spreadsheet
+     */
+    public function exportDatasetToExcel($datasetId)
+    {
+        // Validasi parameter
+        $datasetId = intval($datasetId);
+        if ($datasetId <= 0) {
+            throw new Exception('ID dataset tidak valid');
+        }
+
+        // Ambil data dataset
+        $dataset = $this->db->getDataset($datasetId);
+        if (!$dataset) {
+            throw new Exception('Dataset tidak ditemukan');
+        }
+
+        // Ambil data mentah
+        $rawData = $this->db->getRawData($datasetId);
+        if (empty($rawData)) {
+            throw new Exception('Tidak ada data untuk dataset ini');
+        }
+
+        // Ambil data confusion matrix
+        $confusionMatrixData = $this->db->getConfusionMatrix($datasetId);
+
+        // Buat spreadsheet baru
+        $spreadsheet = new Spreadsheet();
+
+        // Sheet 1: Informasi Dataset
+        $infoSheet = $spreadsheet->getActiveSheet();
+        $infoSheet->setTitle('Informasi Dataset');
+
+        // Judul
+        $infoSheet->setCellValue('A1', 'HASIL PERHITUNGAN CONFUSION MATRIX SPK');
+        $infoSheet->mergeCells('A1:E1');
+        $infoSheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $infoSheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        // Informasi Dataset
+        $infoSheet->setCellValue('A3', 'Informasi Dataset');
+        $infoSheet->getStyle('A3')->getFont()->setBold(true);
+
+        $infoSheet->setCellValue('A4', 'Nama Dataset:');
+        $infoSheet->setCellValue('B4', $dataset['name']);
+
+        $infoSheet->setCellValue('A5', 'Waktu Dibuat:');
+        $infoSheet->setCellValue('B5', $dataset['created_at']);
+
+        $infoSheet->setCellValue('A6', 'Akurasi:');
+        $infoSheet->setCellValue('B6', number_format($dataset['accuracy'], 2) . '%');
+
+        // Sheet 2: Data Alternatif
+        $dataSheet = $spreadsheet->createSheet();
+        $dataSheet->setTitle('Data Alternatif');
+
+        // Header
+        $dataSheet->setCellValue('A1', 'No');
+        $dataSheet->setCellValue('B1', 'Nama Alternatif');
+        $dataSheet->setCellValue('C1', 'Nilai Vektor V');
+        $dataSheet->setCellValue('D1', 'Kelayakan Sistem');
+        $dataSheet->setCellValue('E1', 'Kelayakan Aktual');
+        $dataSheet->setCellValue('F1', 'Status (Layak)');
+
+        $dataSheet->getStyle('A1:F1')->getFont()->setBold(true);
+        $dataSheet->getStyle('A1:F1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $dataSheet->getStyle('A1:F1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFD3D3D3');
+
+        // Isi data
+        $row = 2;
+        foreach ($rawData as $data) {
+            $dataSheet->setCellValue('A' . $row, $data['data_id']);
+            $dataSheet->setCellValue('B' . $row, $data['nama_alternatif']);
+            $dataSheet->setCellValue('C' . $row, $data['nilai_vektor_v']);
+            $dataSheet->setCellValue('D' . $row, $data['kelayakan_sistem']);
+            $dataSheet->setCellValue('E' . $row, $data['kelayakan_aktual']);
+
+            // Status Confusion Matrix
+            $status = '';
+            if ($data['kelayakan_aktual'] === 'Layak' && $data['kelayakan_sistem'] === 'Layak') {
+                $status = 'TP';
+                $dataSheet->getStyle('F' . $row)->getFont()->getColor()->setARGB('FF27AE60'); // Hijau
+            } elseif ($data['kelayakan_aktual'] !== 'Layak' && $data['kelayakan_sistem'] === 'Layak') {
+                $status = 'FP';
+                $dataSheet->getStyle('F' . $row)->getFont()->getColor()->setARGB('FFE67E22'); // Oranye
+            } elseif ($data['kelayakan_aktual'] === 'Layak' && $data['kelayakan_sistem'] !== 'Layak') {
+                $status = 'FN';
+                $dataSheet->getStyle('F' . $row)->getFont()->getColor()->setARGB('FFE67E22'); // Oranye
+            } elseif ($data['kelayakan_aktual'] !== 'Layak' && $data['kelayakan_sistem'] !== 'Layak') {
+                $status = 'TN';
+                $dataSheet->getStyle('F' . $row)->getFont()->getColor()->setARGB('FF95A5A6'); // Abu-abu
+            }
+
+            $dataSheet->setCellValue('F' . $row, $status);
+            $dataSheet->getStyle('F' . $row)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $row++;
+        }
+
+        // Auto-size kolom
+        foreach (range('A', 'F') as $col) {
+            $dataSheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        // Sheet 3: Confusion Matrix
+        $cmSheet = $spreadsheet->createSheet();
+        $cmSheet->setTitle('Confusion Matrix');
+
+        // Judul
+        $cmSheet->setCellValue('A1', 'CONFUSION MATRIX (KELAS LAYAK)');
+        $cmSheet->mergeCells('A1:D1');
+        $cmSheet->getStyle('A1')->getFont()->setBold(true)->setSize(12);
+        $cmSheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        // Matrix header
+        $cmSheet->setCellValue('A3', '');
+        $cmSheet->setCellValue('B3', 'Prediksi');
+        $cmSheet->mergeCells('B3:C3');
+        $cmSheet->getStyle('B3:C3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $cmSheet->setCellValue('A4', 'Aktual');
+        $cmSheet->setCellValue('B4', 'Layak');
+        $cmSheet->setCellValue('C4', 'Tidak Layak');
+
+        // Matrix data
+        $layak = [];
+        foreach ($confusionMatrixData as $row) {
+            if ($row['class_name'] === 'Layak') {
+                $layak = [
+                    'tp' => $row['true_positive'],
+                    'fp' => $row['false_positive'],
+                    'tn' => $row['true_negative'],
+                    'fn' => $row['false_negative'],
+                    'precision' => $row['precision_val'],
+                    'recall' => $row['recall_val'],
+                    'f1_score' => $row['f1_score'],
+                ];
+            }
+        }
+
+        $cmSheet->setCellValue('A5', 'Layak');
+        $cmSheet->setCellValue('B5', $layak['tp'] ?? 0);
+        $cmSheet->setCellValue('C5', $layak['fn'] ?? 0);
+
+        $cmSheet->setCellValue('A6', 'Tidak Layak');
+        $cmSheet->setCellValue('B6', $layak['fp'] ?? 0);
+        $cmSheet->setCellValue('C6', $layak['tn'] ?? 0);
+
+        // Style matrix
+        $cmSheet->getStyle('A3:C6')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+        $cmSheet->getStyle('A4:A6')->getFont()->setBold(true);
+        $cmSheet->getStyle('B4:C4')->getFont()->setBold(true);
+        $cmSheet->getStyle('B5:B5')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFD5F5E3'); // Hijau muda
+        $cmSheet->getStyle('C6:C6')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFD5F5E3'); // Hijau muda
+        $cmSheet->getStyle('B6:B6')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFDEBD0'); // Oranye muda
+        $cmSheet->getStyle('C5:C5')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFDEBD0'); // Oranye muda
+
+        // Metrik evaluasi
+        $cmSheet->setCellValue('A8', 'METRIK EVALUASI (KELAS LAYAK)');
+        $cmSheet->mergeCells('A8:H8');
+        $cmSheet->getStyle('A8')->getFont()->setBold(true);
+        $cmSheet->getStyle('A8')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $cmSheet->setCellValue('A9', 'Kelas');
+        $cmSheet->setCellValue('B9', 'True Positive');
+        $cmSheet->setCellValue('C9', 'False Positive');
+        $cmSheet->setCellValue('D9', 'True Negative');
+        $cmSheet->setCellValue('E9', 'False Negative');
+        $cmSheet->setCellValue('F9', 'Precision');
+        $cmSheet->setCellValue('G9', 'Recall');
+        $cmSheet->setCellValue('H9', 'F1-Score');
+
+        $cmSheet->setCellValue('A10', 'Layak');
+        $cmSheet->setCellValue('B10', $layak['tp'] ?? 0);
+        $cmSheet->setCellValue('C10', $layak['fp'] ?? 0);
+        $cmSheet->setCellValue('D10', $layak['tn'] ?? 0);
+        $cmSheet->setCellValue('E10', $layak['fn'] ?? 0);
+        $cmSheet->setCellValue('F10', number_format(($layak['precision'] ?? 0) * 100, 2) . '%');
+        $cmSheet->setCellValue('G10', number_format(($layak['recall'] ?? 0) * 100, 2) . '%');
+        $cmSheet->setCellValue('H10', number_format(($layak['f1_score'] ?? 0) * 100, 2) . '%');
+
+        // Style metrik
+        $cmSheet->getStyle('A9:H10')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+        $cmSheet->getStyle('A9:H9')->getFont()->setBold(true);
+        $cmSheet->getStyle('A9:H9')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFD3D3D3');
+
+        // Akurasi
+        $totalData = count($rawData);
+        $totalBenar = ($layak['tp'] ?? 0) + ($layak['tn'] ?? 0);
+        $accuracy = ($totalData > 0) ? ($totalBenar / $totalData) : 0;
+
+        $cmSheet->setCellValue('A12', 'AKURASI (ACCURACY)');
+        $cmSheet->mergeCells('A12:D12');
+        $cmSheet->getStyle('A12')->getFont()->setBold(true);
+
+        $cmSheet->setCellValue('A13', 'Rumus:');
+        $cmSheet->setCellValue('B13', '(TP + TN) / (TP + TN + FP + FN)');
+
+        $cmSheet->setCellValue('A14', 'Perhitungan:');
+        $cmSheet->setCellValue('B14', "({$layak['tp']} + {$layak['tn']}) / {$totalData} = " . number_format($accuracy * 100, 2) . '%');
+
+        // Auto-size kolom
+        foreach (range('A', 'H') as $col) {
+            $cmSheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        // Kembali ke sheet pertama
+        $spreadsheet->setActiveSheetIndex(0);
+
+        return $spreadsheet;
     }
 }
