@@ -73,6 +73,9 @@ function getCMStatus($actual, $predicted)
 
 // Tampilkan hasil
 echo '
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
 <div class="results-container">
     <h2>Hasil Perhitungan Confusion Matrix SPK</h2>
     <div class="dataset-info">
@@ -87,7 +90,7 @@ echo '
 $kelasCM = ['Layak'];
 echo '<div class="raw-data-container">';
 echo '<h3>Data Alternatif dan Status Confusion Matrix</h3>';
-echo '<table class="raw-data-table">';
+echo '<table id="raw-data-table-dt" class="raw-data-table display">';
 echo '<thead><tr><th>No</th><th>Nama Alternatif</th><th>Nilai Vektor V</th><th>Kelayakan Sistem</th><th>Kelayakan Aktual</th><th>Status (Layak)</th></tr></thead><tbody>';
 foreach ($rawData as $row) {
     echo '<tr>';
@@ -194,8 +197,70 @@ echo '</div>';
 echo '
     <div class="action-buttons">
         <a href="export_dataset.php?id=' . $datasetId . '&format=json" class="btn">Export JSON</a>
-        <a href="export_dataset.php?id=' . $datasetId . '&format=excel" class="btn btn-success">Export Excel</a>
+        <a href="#" id="export-excel-btn" class="btn btn-success">Export Excel</a>
         <a href="edit_data.php?dataset=' . $datasetId . '" class="btn btn-primary">Edit Data</a>
         <a href="index.php" class="btn btn-secondary">Kembali ke Beranda</a>
     </div>
 </div>';
+
+// jQuery dan DataTables JS
+echo '
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Inisialisasi DataTable dengan urutan default
+    var dataTable = $("#raw-data-table-dt").DataTable({
+        language: {
+            url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
+        },
+        pagingType: "full_numbers",
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
+    });
+    
+    // Tangani klik tombol Export Excel
+    $("#export-excel-btn").on("click", function(e) {
+        e.preventDefault();
+        
+        // Dapatkan data yang diurutkan dari DataTables
+        var orderedData = [];
+        var rows = dataTable.rows({ order: "current" }).data();
+        
+        // Konversi data ke array untuk dikirim ke server
+        rows.each(function(rowData) {
+            var dataId = $(rowData[0]).text() || rowData[0]; // Jika HTML, ambil teksnya
+            orderedData.push(dataId);
+        });
+        
+        // Kirim data urutan ke server untuk ekspor Excel
+        var form = $("<form>")
+            .attr("method", "post")
+            .attr("action", "export_dataset.php")
+            .css("display", "none");
+            
+        $("<input>")
+            .attr("type", "hidden")
+            .attr("name", "id")
+            .attr("value", ' . $datasetId . ')
+            .appendTo(form);
+            
+        $("<input>")
+            .attr("type", "hidden")
+            .attr("name", "format")
+            .attr("value", "excel")
+            .appendTo(form);
+            
+        $("<input>")
+            .attr("type", "hidden")
+            .attr("name", "ordered_data")
+            .attr("value", JSON.stringify(orderedData))
+            .appendTo(form);
+            
+        $("body").append(form);
+        form.submit();
+    });
+});
+</script>';

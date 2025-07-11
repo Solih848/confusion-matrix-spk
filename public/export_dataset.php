@@ -11,7 +11,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 // Periksa apakah ID dataset dan format diberikan
-if (!isset($_GET['id']) || empty($_GET['id'])) {
+if ((!isset($_GET['id']) && !isset($_POST['id'])) || (empty($_GET['id']) && empty($_POST['id']))) {
     die('
         <div class="error-message">
             <h2>Error</h2>
@@ -21,8 +21,14 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     ');
 }
 
-$datasetId = intval($_GET['id']);
-$format = isset($_GET['format']) ? $_GET['format'] : 'json';
+$datasetId = isset($_POST['id']) ? intval($_POST['id']) : intval($_GET['id']);
+$format = isset($_POST['format']) ? $_POST['format'] : (isset($_GET['format']) ? $_GET['format'] : 'json');
+
+// Ambil data urutan dari POST jika ada
+$orderedData = null;
+if (isset($_POST['ordered_data']) && !empty($_POST['ordered_data'])) {
+    $orderedData = json_decode($_POST['ordered_data'], true);
+}
 
 // Inisialisasi utilitas database
 $dbUtils = new DatabaseUtilities();
@@ -68,7 +74,7 @@ if ($format === 'json') {
     // Ekspor ke Excel
     try {
         // Dapatkan spreadsheet
-        $spreadsheet = $dbUtils->exportDatasetToExcel($datasetId);
+        $spreadsheet = $dbUtils->exportDatasetToExcel($datasetId, $orderedData);
 
         // Buat writer
         $writer = new Xlsx($spreadsheet);

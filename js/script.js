@@ -349,62 +349,94 @@ function openTab(tabName) {
     }
 }
 
-// Fungsi untuk memuat hasil dataset
-function loadDatasetResult(datasetId) {
-    if (!datasetId) return;
-
-    const resultContainer = document.getElementById('confusion-matrix-result');
-
-    // Tampilkan pesan loading
-    resultContainer.innerHTML = '<p>Memuat data...</p>';
-
-    // Ambil hasil dengan AJAX
-    fetch(`get_result.php?dataset_id=${datasetId}`)
-        .then(response => response.text())
+// Fungsi untuk memuat daftar dataset
+function loadDatasetList() {
+    const tbody = document.querySelector('#dataset-table tbody');
+    fetch('public/list_datasets.php')
+        .then(response => response.json())
         .then(data => {
-            resultContainer.innerHTML = data;
-
-            // Perbarui dropdown jika ada
-            const selectElement = document.getElementById('dataset-select');
-            if (selectElement) {
-                selectElement.value = datasetId;
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4">Belum ada dataset.</td></tr>';
+            } else {
+                data.forEach(dataset => {
+                    const row = `<tr>
+                        <td><a href="#" class="dataset-link" data-id="${dataset.id}">${dataset.name}</a></td>
+                        <td>${dataset.created_at}</td>
+                        <td>${parseFloat(dataset.accuracy).toFixed(2)}%</td>
+                        <td class="action-buttons">
+                            <a href="public/get_result.php?dataset=${dataset.id}" class="btn btn-sm">Lihat</a>
+                            <a href="public/edit_data.php?dataset=${dataset.id}" class="btn btn-sm btn-primary">Edit</a>
+                            <button onclick="deleteDataset(${dataset.id})" class="btn btn-sm btn-danger">Hapus</button>
+                        </td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
             }
-
-            // Perbarui URL
-            const url = new URL(window.location.href);
-            url.searchParams.set('dataset', datasetId);
-            url.searchParams.set('tab', 'results');
-            window.history.replaceState({}, '', url);
-
-            // Aktifkan tab hasil
-            openTab('results');
         })
         .catch(error => {
-            resultContainer.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            console.error('Error memuat daftar dataset:', error);
+            tbody.innerHTML = '<tr><td colspan="4">Gagal memuat daftar dataset.</td></tr>';
+        });
+}
+
+// Fungsi untuk memuat hasil dataset
+function loadDatasetResult(datasetId) {
+    const resultsContainer = document.getElementById('results-container');
+    resultsContainer.innerHTML = '<p>Memuat hasil...</p>';
+
+    // Gunakan path yang benar ke get_result.php
+    fetch(`public/get_result.php?dataset=${datasetId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Gagal memuat hasil. Status: ' + response.status);
+            }
+            return response.text();
+        })
+        .then(html => {
+            resultsContainer.innerHTML = html;
+            // Inisialisasi DataTables pada tabel hasil yang baru dimuat
+            const newTable = $('#raw-data-table-dt');
+            if (newTable.length && jQuery().DataTable) {
+                if ($.fn.dataTable.isDataTable(newTable)) {
+                    newTable.DataTable().destroy();
+                }
+                newTable.DataTable({
+                    language: {
+                        url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
+                    },
+                    stateSave: true,
+                    pagingType: "full_numbers",
+                    pageLength: 10,
+                    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            resultsContainer.innerHTML = `<div class="error-message"><h2>Error</h2><p>${error.message}</p></div>`;
         });
 }
 
 // Fungsi untuk menghapus dataset
 function deleteDataset(datasetId) {
-    if (!confirm('Apakah Anda yakin ingin menghapus dataset ini?')) {
-        return;
+    if (confirm('Apakah Anda yakin ingin menghapus dataset ini?')) {
+        // Hapus dataset dengan AJAX
+        fetch(`delete_dataset.php?dataset_id=${datasetId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    // Reload halaman untuk memperbarui daftar
+                    location.reload();
+                } else {
+                    alert(`Error: ${data.message}`);
+                }
+            })
+            .catch(error => {
+                alert(`Error: ${error.message}`);
+            });
     }
-
-    // Hapus dataset dengan AJAX
-    fetch(`delete_dataset.php?dataset_id=${datasetId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert(data.message);
-                // Reload halaman untuk memperbarui daftar
-                location.reload();
-            } else {
-                alert(`Error: ${data.message}`);
-            }
-        })
-        .catch(error => {
-            alert(`Error: ${error.message}`);
-        });
 }
 
 // Event listener saat dokumen dimuat

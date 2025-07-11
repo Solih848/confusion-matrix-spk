@@ -355,9 +355,10 @@ class DatabaseUtilities
      * Export data dataset ke format Excel
      * 
      * @param int $datasetId ID dataset
+     * @param array|null $orderedData Array ID data yang sudah diurutkan (opsional)
      * @return Spreadsheet objek Spreadsheet
      */
-    public function exportDatasetToExcel($datasetId)
+    public function exportDatasetToExcel($datasetId, $orderedData = null)
     {
         // Validasi parameter
         $datasetId = intval($datasetId);
@@ -375,6 +376,31 @@ class DatabaseUtilities
         $rawData = $this->db->getRawData($datasetId);
         if (empty($rawData)) {
             throw new Exception('Tidak ada data untuk dataset ini');
+        }
+
+        // Jika ada data urutan yang diberikan, urutkan data mentah sesuai urutan tersebut
+        if ($orderedData !== null && is_array($orderedData) && !empty($orderedData)) {
+            // Buat array sementara untuk menyimpan data yang diurutkan
+            $orderedRawData = [];
+
+            // Indeks data berdasarkan data_id untuk pencarian cepat
+            $dataIndex = [];
+            foreach ($rawData as $index => $row) {
+                $dataIndex[$row['data_id']] = $index;
+            }
+
+            // Susun data sesuai urutan yang diberikan
+            foreach ($orderedData as $dataId) {
+                // Pastikan data_id ada dalam dataset
+                if (isset($dataIndex[$dataId])) {
+                    $orderedRawData[] = $rawData[$dataIndex[$dataId]];
+                }
+            }
+
+            // Jika ada data yang berhasil diurutkan, gunakan data yang sudah diurutkan
+            if (!empty($orderedRawData)) {
+                $rawData = $orderedRawData;
+            }
         }
 
         // Ambil data confusion matrix
