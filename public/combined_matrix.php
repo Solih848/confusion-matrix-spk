@@ -215,6 +215,12 @@ if (isset($_POST['calculate']) && isset($_POST['datasets']) && !empty($_POST['da
 
                     <!-- Tombol aksi -->
                     <div class="action-buttons">
+                        <form action="export_combined_matrix.php" method="post">
+                            <?php foreach ($selectedDatasetIds as $datasetId): ?>
+                                <input type="hidden" name="datasets[]" value="<?php echo $datasetId; ?>">
+                            <?php endforeach; ?>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-file-excel"></i> Export Excel</button>
+                        </form>
                         <a href="combined_matrix.php" class="btn btn-danger" id="reset-btn"><i class="fas fa-undo"></i> Reset</a>
                     </div>
                 <?php elseif (isset($_POST['calculate'])) : ?>
