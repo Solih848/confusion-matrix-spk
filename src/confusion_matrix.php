@@ -260,4 +260,43 @@ class ConfusionMatrix
 
         return $html;
     }
+
+    /**
+     * Mendapatkan confusion matrix khusus kelas Layak dalam format HTML
+     * dengan tata letak FP dan FN sudah ditukar
+     *
+     * @return string HTML tabel confusion matrix kelas Layak
+     */
+    public function getHtmlMatrixLayak()
+    {
+        // Pastikan kelas Layak ada
+        $layak = null;
+        foreach ($this->classes as $class) {
+            if (strtolower($class) === 'layak') {
+                $layak = $this->getMetrics($class);
+                break;
+            }
+        }
+        if (!$layak) {
+            return '<div class="confusion-matrix-container"><p>Kelas "Layak" tidak ditemukan.</p></div>';
+        }
+        $html = '<div class="confusion-matrix-container">';
+        $html .= '<h3>Confusion Matrix (Kelas Layak)</h3>';
+        $html .= '<table class="confusion-matrix">';
+        $html .= '<tr><th></th><th colspan="2">Prediksi</th></tr>';
+        $html .= '<tr><th>Aktual</th><th>Layak</th><th>Tidak Layak</th></tr>';
+        $html .= '<tr>';
+        $html .= '<th>Layak</th>';
+        $html .= '<td class="correct">' . $layak['tp'] . '</td>';
+        $html .= '<td class="incorrect">' . $layak['fp'] . '</td>';
+        $html .= '</tr>';
+        $html .= '<tr>';
+        $html .= '<th>Tidak Layak</th>';
+        $html .= '<td class="incorrect">' . $layak['fn'] . '</td>';
+        $html .= '<td class="correct">' . $layak['tn'] . '</td>';
+        $html .= '</tr>';
+        $html .= '</table>';
+        $html .= '</div>';
+        return $html;
+    }
 }

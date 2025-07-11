@@ -148,7 +148,7 @@ if (isset($_POST['calculate']) && isset($_POST['datasets']) && !empty($_POST['da
 
                     <!-- Tampilkan confusion matrix -->
                     <div class="confusion-matrix-visualization">
-                        <?php echo $confusionMatrix->getHtmlMatrix(); ?>
+                        <?php echo $confusionMatrix->getHtmlMatrixLayak(); ?>
                     </div>
 
                     <!-- Tampilkan metrik -->

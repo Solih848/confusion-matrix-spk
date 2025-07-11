@@ -477,7 +477,7 @@ class DatabaseUtilities
         $cmSheet->setCellValue('B4', 'Layak');
         $cmSheet->setCellValue('C4', 'Tidak Layak');
 
-        // Matrix data
+        // Matrix data (FP dan FN sudah ditukar)
         $layak = [];
         foreach ($confusionMatrixData as $row) {
             if ($row['class_name'] === 'Layak') {
@@ -495,10 +495,10 @@ class DatabaseUtilities
 
         $cmSheet->setCellValue('A5', 'Layak');
         $cmSheet->setCellValue('B5', $layak['tp'] ?? 0);
-        $cmSheet->setCellValue('C5', $layak['fn'] ?? 0);
+        $cmSheet->setCellValue('C5', $layak['fp'] ?? 0);
 
         $cmSheet->setCellValue('A6', 'Tidak Layak');
-        $cmSheet->setCellValue('B6', $layak['fp'] ?? 0);
+        $cmSheet->setCellValue('B6', $layak['fn'] ?? 0);
         $cmSheet->setCellValue('C6', $layak['tn'] ?? 0);
 
         // Style matrix
