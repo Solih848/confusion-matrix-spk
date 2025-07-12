@@ -283,8 +283,8 @@ class ConfusionMatrix
         $html = '<div class="confusion-matrix-container">';
         $html .= '<h3>Confusion Matrix (Kelas Layak)</h3>';
         $html .= '<table class="confusion-matrix">';
-        $html .= '<tr><th></th><th colspan="2">Prediksi</th></tr>';
-        $html .= '<tr><th>Aktual</th><th>Layak</th><th>Tidak Layak</th></tr>';
+        $html .= '<tr><th></th><th colspan="2">Aktual</th></tr>';
+        $html .= '<tr><th>Prediksi</th><th>Layak</th><th>Tidak Layak</th></tr>';
         $html .= '<tr>';
         $html .= '<th>Layak</th>';
         $html .= '<td class="correct">' . $layak['tp'] . '</td>';

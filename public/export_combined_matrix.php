@@ -180,11 +180,11 @@ $cmSheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CE
 
 // Matrix header
 $cmSheet->setCellValue('A3', '');
-$cmSheet->setCellValue('B3', 'Prediksi');
+$cmSheet->setCellValue('B3', 'Aktual');
 $cmSheet->mergeCells('B3:C3');
 $cmSheet->getStyle('B3:C3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-$cmSheet->setCellValue('A4', 'Aktual');
+$cmSheet->setCellValue('A4', 'Prediksi');
 $cmSheet->setCellValue('B4', 'Layak');
 $cmSheet->setCellValue('C4', 'Tidak Layak');
 
@@ -377,11 +377,11 @@ foreach ($selectedDatasets as $index => $dataset) {
 
         // Matrix header
         $dsSheet->setCellValue('A' . ($row + 4), '');
-        $dsSheet->setCellValue('B' . ($row + 4), 'Prediksi');
+        $dsSheet->setCellValue('B' . ($row + 4), 'Aktual');
         $dsSheet->mergeCells('B' . ($row + 4) . ':C' . ($row + 4));
         $dsSheet->getStyle('B' . ($row + 4) . ':C' . ($row + 4))->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        $dsSheet->setCellValue('A' . ($row + 5), 'Aktual');
+        $dsSheet->setCellValue('A' . ($row + 5), 'Prediksi');
         $dsSheet->setCellValue('B' . ($row + 5), 'Layak');
         $dsSheet->setCellValue('C' . ($row + 5), 'Tidak Layak');
 
